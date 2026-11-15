@@ -17,8 +17,6 @@ export function SiteFooter() {
           <h3 className="font-semibold text-[#f5f2fb]">Shop</h3>
           <ul className="mt-2.5 space-y-2 text-[#a79dbc]">
             <li><Link href="/#catalog" className="hover:text-[#f5f2fb]">Catalog</Link></li>
-            <li><Link href="/cart" className="hover:text-[#f5f2fb]">Cart</Link></li>
-            <li><Link href="/checkout" className="hover:text-[#f5f2fb]">Checkout</Link></li>
           </ul>
         </nav>
 

@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { getCatalog } from "@/lib/catalog";
 import { isFrontendPreview } from "@/lib/preview-mode";
-import { AddToCartForm } from "@/components/add-to-cart-form";
+import { BuyForm } from "@/components/buy-form";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 
@@ -67,7 +67,7 @@ async function GameContent({
 
         <div className="mt-8">
           {game.packages.length ? (
-            <AddToCartForm game={game} />
+            <BuyForm game={game} />
           ) : (
             <p className="rounded-md border border-[#2e2742] bg-[#171320] px-4 py-10 text-center text-[15px] text-[#a79dbc]">
               No active {game.category === "AI Tools" ? "plans" : "packages"} are available for this product yet.

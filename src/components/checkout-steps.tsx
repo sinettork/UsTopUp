@@ -1,4 +1,4 @@
-const steps = ["Cart", "Review", "Payment"];
+const steps = ["Top up", "Review", "Payment"];
 
 export function CheckoutSteps({ current }: { current: 1 | 2 }) {
   return (

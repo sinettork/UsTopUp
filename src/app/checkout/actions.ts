@@ -11,32 +11,32 @@ export type CheckoutActionState = {
   orderNumber?: string;
 };
 
-const cartSchema = z.array(z.object({
+const orderSchema = z.object({
   packageId: z.string().uuid(),
   expectedPriceMinor: z.number().int().nonnegative(),
   expectedCurrency: z.string().length(3),
   inputs: z.record(z.string(), z.string().max(500)),
-}).strict()).min(1).max(20);
+}).strict();
 
-export async function createCartOrder(
+export async function createOrder(
   _previousState: CheckoutActionState,
   formData: FormData,
 ): Promise<CheckoutActionState> {
   const idempotencyKey = z.string().uuid().safeParse(formData.get("idempotency_key"));
-  const cartPayload = z.string().min(2).max(60_000).safeParse(formData.get("cart_payload"));
-  if (!idempotencyKey.success || !cartPayload.success) {
+  const orderPayload = z.string().min(2).max(20_000).safeParse(formData.get("order_payload"));
+  if (!idempotencyKey.success || !orderPayload.success) {
     return { message: "Your checkout session is invalid. Reload the page and try again." };
   }
 
   let parsedJson: unknown;
   try {
-    parsedJson = JSON.parse(cartPayload.data);
+    parsedJson = JSON.parse(orderPayload.data);
   } catch {
-    return { message: "Your cart could not be read. Return to the cart and try again." };
+    return { message: "Your order could not be read. Return to the product page and try again." };
   }
-  const parsedCart = cartSchema.safeParse(parsedJson);
-  if (!parsedCart.success) {
-    return { message: "One or more cart items are invalid. Review your cart and try again." };
+  const parsedOrder = orderSchema.safeParse(parsedJson);
+  if (!parsedOrder.success) {
+    return { message: "Your order details are invalid. Return to the product page and try again." };
   }
 
   if (isFrontendPreview()) {
@@ -61,19 +61,19 @@ export async function createCartOrder(
   }
 
   const { data, error } = await supabase.rpc("create_order_from_cart", {
-    _items: parsedCart.data.map((item) => ({
-      package_id: item.packageId,
-      expected_price_minor: item.expectedPriceMinor,
-      expected_currency: item.expectedCurrency,
-      inputs: item.inputs,
-    })),
+    _items: [{
+      package_id: parsedOrder.data.packageId,
+      expected_price_minor: parsedOrder.data.expectedPriceMinor,
+      expected_currency: parsedOrder.data.expectedCurrency,
+      inputs: parsedOrder.data.inputs,
+    }],
     _idempotency_key: idempotencyKey.data,
   });
 
   if (error || !data?.[0]?.order_number) {
     const safeMessage = error?.code === "22023" && error.message.length < 240
       ? error.message
-      : "We could not place this order. Please review your cart and try again.";
+      : "We could not place this order. Review your details and try again.";
     return { message: safeMessage };
   }
 
