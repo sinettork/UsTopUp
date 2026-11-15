@@ -39,7 +39,7 @@ async function CheckoutContent() {
 }
 
 function CheckoutFallback() {
-  return <main className="min-h-screen bg-[#09090b] px-4 py-8 text-zinc-100" aria-busy="true"><div className="mx-auto max-w-6xl space-y-6"><div className="h-14 animate-pulse rounded-lg bg-zinc-900" /><div className="grid gap-6 lg:grid-cols-[1fr_340px]"><div className="h-96 animate-pulse rounded-xl border border-zinc-800 bg-zinc-900/50" /><div className="h-72 animate-pulse rounded-xl border border-zinc-800 bg-zinc-900/50" /></div></div></main>;
+  return <main className="min-h-screen bg-[#0a0714] px-4 py-8 text-[#f5f2fb]" aria-busy="true"><div className="mx-auto max-w-6xl space-y-6"><div className="h-14 animate-pulse rounded-lg bg-[#1d172c]" /><div className="grid gap-6 lg:grid-cols-[1fr_340px]"><div className="h-96 animate-pulse rounded-xl border border-[#2e2742] bg-[#171320]" /><div className="h-72 animate-pulse rounded-xl border border-[#2e2742] bg-[#171320]" /></div></div></main>;
 }
 
 export default function CheckoutRoute() {

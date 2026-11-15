@@ -20,18 +20,15 @@ async function CatalogSection() {
 
 function CatalogFallback() {
   return (
-    <div className="min-h-screen bg-[#261f3c] px-0 py-0 md:p-5" aria-busy="true">
-      <div className="mx-auto min-h-[calc(100vh-2.5rem)] max-w-[1360px] bg-[#0e0a19] px-4 sm:px-7 md:rounded-[26px] md:border-[9px] md:border-[#403455] md:px-8 lg:px-12">
-        <header className="mt-5 h-[58px] animate-pulse rounded-full bg-[#1a1427]" />
-        <main className="mx-auto max-w-6xl space-y-6 pb-10 pt-7">
-          <div className="min-h-[215px] animate-pulse rounded-xl border border-[#30263e] bg-[#1b1428] sm:min-h-[255px]" />
-          <div className="h-12 animate-pulse rounded-full bg-[#171220]" />
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {Array.from({ length: 4 }, (_, index) => (
-              <div key={index} className="aspect-[16/9] animate-pulse rounded-lg border border-[#30263e] bg-[#191323]" />
-            ))}
-          </div>
-        </main>
+    <div className="min-h-screen bg-[#0a0714] px-4 py-6 sm:px-6" aria-busy="true">
+      <div className="mx-auto max-w-6xl space-y-6">
+        <div className="h-14 animate-pulse rounded-md bg-[#1d172c]" />
+        <div className="h-9 w-72 max-w-full animate-pulse rounded-md bg-[#1d172c]" />
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {Array.from({ length: 8 }, (_, index) => (
+            <div key={index} className="aspect-[4/5] animate-pulse rounded-md border border-[#2e2742] bg-[#171320]" />
+          ))}
+        </div>
       </div>
     </div>
   );

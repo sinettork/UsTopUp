@@ -25,7 +25,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`dark ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-[#100d18] font-sans text-zinc-100">
+      <body className="min-h-full bg-[#0a0714] font-sans text-[#f5f2fb]">
         <ThemeProvider><CartProvider>{children}</CartProvider></ThemeProvider>
       </body>
     </html>
