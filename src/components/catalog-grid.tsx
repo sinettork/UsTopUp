@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -60,6 +60,22 @@ export function CatalogGrid({
   const [filter, setFilter] = useState("All products");
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("featured");
+  const [activeHeroIndex, setActiveHeroIndex] = useState(0);
+
+  const heroGames = useMemo(
+    () => games.filter((game) => game.bannerUrl || game.imageUrl),
+    [games],
+  );
+  const heroGame = heroGames[activeHeroIndex] ?? games[0];
+  const heroImage = heroGame?.bannerUrl ?? heroGame?.imageUrl ?? null;
+
+  useEffect(() => {
+    if (heroGames.length < 2) return;
+    const timeout = window.setTimeout(() => {
+      setActiveHeroIndex((index) => (index + 1) % heroGames.length);
+    }, 5000);
+    return () => window.clearTimeout(timeout);
+  }, [activeHeroIndex, heroGames.length]);
 
   const categories = useMemo(
     () => ["All products", ...new Set(games.map((game) => game.category))],
@@ -88,6 +104,36 @@ export function CatalogGrid({
       <SiteHeader searchValue={search} onSearchChange={setSearch} />
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-16 sm:px-6 lg:px-8">
+        {heroImage && heroGame && (
+          <section aria-label="Featured game banner" className="relative isolate mt-6 h-[210px] overflow-hidden rounded-md border border-[#2e2742] bg-[#171320] sm:h-[260px] lg:h-[300px]">
+            <Link href={`/games/${heroGame.slug}`} aria-label={`View ${heroGame.title}`} className="absolute inset-0 z-0">
+              <Image
+                src={heroImage}
+                alt=""
+                fill
+                sizes="(max-width: 1024px) 100vw, 1100px"
+                unoptimized
+                fetchPriority="high"
+                className="object-cover object-center"
+              />
+            </Link>
+            {heroGames.length > 1 && (
+              <div aria-label="Choose banner" className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5">
+                {heroGames.map((game, index) => (
+                  <button
+                    key={game.id}
+                    type="button"
+                    aria-label={`Show ${game.title} banner`}
+                    aria-current={index === activeHeroIndex ? "true" : undefined}
+                    onClick={() => setActiveHeroIndex(index)}
+                    className={`h-1 rounded-full transition-all ${index === activeHeroIndex ? "w-6 bg-[#a887ff]" : "w-3 bg-white/35 hover:bg-white/65"}`}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
         <div className="max-w-2xl pt-10">
           <h1 className="text-3xl font-bold tracking-tight">Game top-ups &amp; subscriptions</h1>
           <p className="mt-2 text-[15px] leading-6 text-[#a79dbc]">
